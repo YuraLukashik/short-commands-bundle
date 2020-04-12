@@ -1,0 +1,55 @@
+#!/usr/bin/env php
+<?php
+
+use Symfony\Bundle\FrameworkBundle\Console\Application;
+use Symfony\Component\Config\Loader\LoaderInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Kernel;
+
+require __DIR__.'/../vendor/autoload.php';
+
+class AppKernel extends Kernel {
+
+    /**
+     * @inheritDoc
+     */
+    public function registerBundles()
+    {
+        return [
+            new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
+            new \ShortCommands\ShortCommandsBundle(),
+        ];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function registerContainerConfiguration(LoaderInterface $loader)
+    {
+        $loader->load($this->getRootDir() . '/../config.yml');
+    }
+
+    public function getRootDir()
+    {
+        return __DIR__;
+    }
+
+    public function getCacheDir()
+    {
+        return __DIR__ . '/../var/cache';
+    }
+
+    public function getLogDir()
+    {
+        return __DIR__ . '/../var/logs';
+    }
+
+    protected function build(ContainerBuilder $container)
+    {
+        $container->setParameter('kernel.secret', '');
+    }
+}
+
+$kernel = new AppKernel('dev', true);
+$application = new Application($kernel);
+$application->run();

@@ -1,0 +1,3 @@
+short_commands:
+  directories:
+    - "%kernel.root_dir%/../examples"
