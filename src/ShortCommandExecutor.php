@@ -22,8 +22,22 @@ class ShortCommandExecutor extends Command
     {
         $this->path = $path;
         $this->pathInfo = pathinfo($path);
-        $this->arguments = $arguments;
+        $this->arguments = \array_map(function ($argument) {
+            if (\is_array($argument)) {
+                return CommandArgument::fromArray($argument);
+            }
+            return $argument;
+        }, $arguments);
         parent::__construct($this->pathInfo['filename']);
+    }
+
+    public function configure()
+    {
+        foreach ($this->arguments as $argument) {
+            if ($argument instanceof CommandArgument) {
+                $argument->declareInCommand($this);
+            }
+        }
     }
 
     /**
@@ -33,6 +47,9 @@ class ShortCommandExecutor extends Command
     {
         $command = ShortCommandResource::loadCommand($this->path);
         $arguments = array_map(function ($argument) use ($input, $output) {
+            if ($argument instanceof CommandArgument) {
+                return $argument->takeFrom($input);
+            }
             if ($argument === OutputInterface::class) {
                 return $output;
             }

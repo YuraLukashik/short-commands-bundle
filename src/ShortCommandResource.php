@@ -60,10 +60,7 @@ class ShortCommandResource implements SelfCheckingResourceInterface, \Serializab
         $hash = hash_init('md5');
 
         foreach ($reflection->getParameters() as $parameter) {
-            if (!$parameter->hasType()) {
-                continue;
-            }
-            hash_update($hash, (string) $parameter->getClass());
+            hash_update($hash, (string) $parameter);
         }
 
         return hash_final($hash);

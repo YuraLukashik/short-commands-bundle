@@ -59,7 +59,12 @@ class RegisterShortCommandsCompilerPass implements CompilerPassInterface
         $functionReflection = new \ReflectionFunction($function);
         $definitions = [];
         foreach ($functionReflection->getParameters() as $parameter) {
-            $parameterClassName = $parameter->getClass()->getName();
+            $class = $parameter->getClass();
+            if ($class === null) {
+                $definitions[] = CommandArgument::fromParameter($parameter)->toArray();
+                continue;
+            }
+            $parameterClassName = $class->getName();
             if (in_array($parameterClassName, ShortCommandExecutor::CAN_RESOLVE_ARGUMENTS)) {
                 $definitions[] = $parameterClassName; // should be passed by executor
                 continue;
