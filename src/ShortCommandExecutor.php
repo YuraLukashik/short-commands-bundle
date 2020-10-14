@@ -58,6 +58,7 @@ class ShortCommandExecutor extends Command
             }
             return $argument;
         }, $this->arguments);
-        call_user_func($command, ...$arguments);
+        $executionResult = call_user_func($command, ...$arguments);
+        return \is_int($executionResult) ? $executionResult : 0;
     }
 }
