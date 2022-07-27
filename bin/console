@@ -13,7 +13,7 @@ class AppKernel extends Kernel {
     /**
      * @inheritDoc
      */
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         return [
             new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
@@ -34,12 +34,12 @@ class AppKernel extends Kernel {
         return __DIR__;
     }
 
-    public function getCacheDir()
+    public function getCacheDir(): string
     {
         return __DIR__ . '/../var/cache';
     }
 
-    public function getLogDir()
+    public function getLogDir(): string
     {
         return __DIR__ . '/../var/logs';
     }

@@ -5,7 +5,7 @@ namespace ShortCommands;
 
 use Symfony\Component\Config\Resource\SelfCheckingResourceInterface;
 
-class ShortCommandResource implements SelfCheckingResourceInterface, \Serializable
+class ShortCommandResource implements SelfCheckingResourceInterface
 {
     private $path;
     private $hash;
@@ -15,29 +15,23 @@ class ShortCommandResource implements SelfCheckingResourceInterface, \Serializab
         $this->path = $path;
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function serialize()
+    public function __serialize(): array
     {
         if (null === $this->hash) {
             $this->hash = $this->computeHash();
         }
-        return serialize([$this->path, $this->hash]);
+        return [$this->path, $this->hash];
     }
 
-    /**
-     * @inheritDoc
-     */
-    public function unserialize($serialized)
+    public function __unserialize(array $serialized)
     {
-        [$this->path, $this->hash] = unserialize($serialized);
+        [$this->path, $this->hash] = $serialized;
     }
 
     /**
      * @inheritDoc
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->path;
     }
@@ -45,7 +39,7 @@ class ShortCommandResource implements SelfCheckingResourceInterface, \Serializab
     /**
      * @inheritDoc
      */
-    public function isFresh($timestamp)
+    public function isFresh($timestamp): bool
     {
         if (null === $this->hash) {
             $this->hash = $this->computeHash();
