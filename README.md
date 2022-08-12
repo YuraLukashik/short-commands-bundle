@@ -2,6 +2,9 @@ Short commands for Symfony Console
 ===
 
 * Install `ShortCommandsBundle`.
+```bash
+composer require yuralukashik/short-commands-bundle
+```
 * Register a folder with your commands, see `config.yml`:
 ```yaml
 short_commands:
